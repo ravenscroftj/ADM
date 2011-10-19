@@ -2,4 +2,9 @@
 <resources>
     <string name="hello">Hello World, ADMActivity!</string>
     <string name="app_name">ADM</string>
+    <string name="addLinks">Add Links</string>
+    <string name="download">Download</string>
+    <string name="checkLinks">Check Links</string>
+    <string name="remove_dead_links">Remove Offline</string>
+    <string name="paste_links_prompt">Paste your links below...</string>
 </resources>
