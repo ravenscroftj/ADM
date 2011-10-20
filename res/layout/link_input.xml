@@ -5,9 +5,9 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
     <TextView android:textAppearance="?android:attr/textAppearanceLarge" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/paste_links_prompt"></TextView>
-    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="10" android:id="@+id/pasteLinksTxt">
+    <EditText android:layout_width="fill_parent" android:layout_height="wrap_content" android:inputType="textMultiLine" android:minLines="10" android:id="@+id/pasteLinksTxt" android:gravity="top">
         <requestFocus></requestFocus>
     </EditText>
-    <Button android:id="@+id/addLinksBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/checkLinks"></Button>
+    <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/checkLinks" android:id="@+id/addLinksToCheckerBtn"></Button>
     
 </LinearLayout>
