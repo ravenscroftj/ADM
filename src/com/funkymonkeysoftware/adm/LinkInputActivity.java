@@ -1,4 +1,4 @@
-package com.funkymonkeysoftware.adm;
+ package com.funkymonkeysoftware.adm;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -78,8 +78,8 @@ public class LinkInputActivity extends Activity implements OnClickListener{
 			a.setMessage("One or more invalid URLS were detected. " +
 					"These were not added to the link checker.");
 		}
-		
-		
+		//close the database
+		dbhelper.getWritableDatabase().close();
 		//close the view
 		finish();
 	}

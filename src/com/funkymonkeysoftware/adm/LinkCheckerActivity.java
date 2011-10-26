@@ -1,10 +1,18 @@
 package com.funkymonkeysoftware.adm;
 
+import java.net.URL;
+
+import com.funkymonkeysoftware.adm.download.LinkChecker;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.util.Linkify;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -16,6 +24,32 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	
 	private Button addLinksBtn;
 	private DownloadsDBOpenHelper dbhelper;
+	
+	/**
+	 * This class  runs URLCheckers over all the URLs
+	 * 
+	 * @author James Ravenscroft
+	 *
+	 */
+	private class LinkCheckerTask extends AsyncTask<URL, Integer, String[]>{
+
+		@Override
+		protected String[] doInBackground(URL... params) {
+		
+			String[] result = new String[params.length];
+			
+			for(int i=0; i < params.length; i++){
+				//check the status of the named url
+				URL current = params[i];
+				
+				//TODO: integrate checker manager here that runs different checkers
+				LinkChecker chk;
+			}
+			
+			return result;
+		}
+		
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +65,10 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		addLinksBtn.setOnClickListener(this);
 		
 		//load the links
+		loadLinks();
 	}
 	
 	private void loadLinks(){
-		
 		//get the table to append things to
 		TableLayout table = (TableLayout)findViewById(R.id.checkLinksTable);
 	
@@ -45,30 +79,46 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 				"status='unchecked' OR status='online' OR " +
 				"status='offline'", null);
 		
-		if(!c.moveToFirst()) {
+		if(c.getCount() < 1) {
 			//provide some kind of error message
 			TextView error = new TextView(this);
+			TableRow r = new TableRow(this);
 			error.setText("No URLS, consider adding some!");
-			table.addView(error);
+			r.addView(error);
+			table.addView(r);
 		}else{
 			
-			for(c.moveToFirst(); c.moveToNext() ;){
+			while(c.moveToNext()){
 				
 				TableRow tr = new TableRow(this);
-				
 				TextView url = new TextView(this);
 				url.setText(c.getString(1));
-				TextView status = new TextView(this);
-				status.setText(c.getString(2));
+				
+				
+				TextView statusBox = new TextView(this);
+				//depending on the text, set colour
+				String status = c.getString(2);
+				
+				if(status.equals("unchecked")){
+					statusBox.setTextColor(Color.YELLOW);
+				}else if(status.equals("online")){
+					statusBox.setTextColor(Color.GREEN);
+				}else if(status.equals("offline")){
+					statusBox.setTextColor(Color.RED);
+				}
+				
+				statusBox.setText(status);
 				
 				tr.addView(url);
-				tr.addView(status);
-				
+				tr.addView(statusBox);
 				table.addView(tr);
+				
 			}
 			
 		}
 	}
+	
+	
 
 	@Override
 	public void onClick(View v) {
