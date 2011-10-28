@@ -44,6 +44,11 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	private Button checkLinksBtn;
 	
 	/**
+	 * Button that removes all the offline links
+	 */
+	private Button removeOfflineBtn;
+	
+	/**
 	 * Object designed to assist in the opening and closing of the db
 	 */
 	private DownloadsDBOpenHelper dbhelper;
@@ -66,6 +71,9 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		
 		checkLinksBtn = (Button)findViewById(R.id.checkLinksBtn);
 		checkLinksBtn.setOnClickListener(this);
+		
+		removeOfflineBtn = (Button)findViewById(R.id.removeOfflineBtn);
+		removeOfflineBtn.setOnClickListener(this);
 		
 		//load the links
 		loadLinks();
@@ -125,6 +133,18 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		}
 	}
 	
+
+	/**
+	 * Delete all URLS in the database in the 'offline' state
+	 */
+	private void removeOffline(){
+		//run the query
+		SQLiteDatabase db = dbhelper.getWritableDatabase();
+		db.delete("downloads", "status=?", new String[]{"offline"});
+		
+		//redraw the table
+		loadLinks();
+	}
 	
 
 	@Override
@@ -134,7 +154,9 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 			//show the add links view
 			startActivity(new Intent(this, LinkInputActivity.class));
 		}else if(v.equals(checkLinksBtn)){
-				checkUrls();
+			checkUrls();
+		}else if(v.equals(removeOfflineBtn)){
+			removeOffline();
 		}
 	}
 	
@@ -169,7 +191,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		pdialog.setProgress(0);
 		
 		//set progress dialog text
-		pdialog.setMessage(String.format("Checking URL 1/%d", c.getCount()));
+		pdialog.setMessage(String.format("Initialising Checker...", c.getCount()));
 		
 		//show the progress bar
 		pdialog.show();
@@ -225,6 +247,12 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 						progress[0], theURLS.length));
 		}
 		
+		/**
+		 * Method executed when all links have been checked.
+		 * 
+		 * @param result <p>An array of strings that map directly to 
+		 * 					each of the input URLs</p>
+		 */
 		protected void onPostExecute(String[] result){
 			//update the database
 			SQLiteDatabase db = dbhelper.getWritableDatabase();
