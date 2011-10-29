@@ -25,6 +25,7 @@ public class DownloadRow extends TableRow {
 		super(context);
 		setURL(url);
 		setStatus(status);
+
 		
 		//now set up display
 		configureDisplay();
@@ -70,6 +71,9 @@ public class DownloadRow extends TableRow {
 		
 		//add checkbox
 		cbox = new CheckBox(getContext());
+		
+		//box is initially checked
+		cbox.setChecked(true);
 
 		//set up layout for row
 		TableRow.LayoutParams tl = new TableRow.LayoutParams();

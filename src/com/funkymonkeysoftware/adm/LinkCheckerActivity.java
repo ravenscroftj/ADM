@@ -3,6 +3,7 @@ package com.funkymonkeysoftware.adm;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedList;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -48,11 +49,26 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	private Button removeOfflineBtn;
 	
 	/**
+	 * Button for selecting or deselecting all urls
+	 */
+	private Button selectAllBtn;
+	
+	/**
 	 * Object designed to assist in the opening and closing of the db
 	 */
 	private DownloadsDBOpenHelper dbhelper;
 	
+	/**
+	 * A progress dialog shown for when the link checker is actually running
+	 */
 	private ProgressDialog pdialog;
+	
+	/**
+	 * Flag determines whether all links are selected or not
+	 */
+	private boolean selectAll = true;
+	
+	private LinkedList<DownloadRow> rows;
 	
 
 	@Override
@@ -74,6 +90,12 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		removeOfflineBtn = (Button)findViewById(R.id.removeOfflineBtn);
 		removeOfflineBtn.setOnClickListener(this);
 		
+		selectAllBtn = (Button)findViewById(R.id.toggleSelectAllBtn);
+		selectAllBtn.setOnClickListener(this);
+		
+		//initialise list of rows
+		rows = new LinkedList<DownloadRow>();
+		
 		//load the links
 		loadLinks();
 	}
@@ -85,8 +107,13 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	
 		table.setColumnStretchable(1, true);
 		
+		//set select all to none (since all links are initially selected)
+		selectAll = true;
+		selectAllBtn.setText(R.string.select_none);
+		
 		//empty the table view
 		table.removeAllViews();
+		rows.clear();
 		
 		//get all downloads that are unchecked or online or offline
 		SQLiteDatabase db = dbhelper.getWritableDatabase();
@@ -108,10 +135,35 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 				
 				DownloadRow tr = new DownloadRow(this, c.getString(1), c.getString(2));
 				
-				table.addView(tr, new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
+				//add the row to the table and the rows list
+				rows.add(tr);
+				
+				table.addView(tr, new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, 
+						LayoutParams.FILL_PARENT));
 				
 			}
 			
+		}
+	}
+	
+	/**
+	 * Called when the user presses select all/none button
+	 */
+	private void toggleSelectAll(){
+		
+		//swap the flag
+		selectAll = !selectAll;
+		
+		//see what to display on the select button
+		int id = selectAll ? R.string.select_none : R.string.select_all;
+		
+		//set the new text
+		selectAllBtn.setText(id);
+		
+		//now iterate through all rows and select them
+		
+		for(DownloadRow r : rows){
+			r.setSelected(selectAll);
 		}
 	}
 	
@@ -148,6 +200,8 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 			checkUrls();
 		}else if(v.equals(removeOfflineBtn)){
 			removeOffline();
+		}else if(v.equals(selectAllBtn)) {
+			toggleSelectAll();
 		}
 	}
 	
