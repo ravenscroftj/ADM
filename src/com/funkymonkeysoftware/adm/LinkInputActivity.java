@@ -6,6 +6,7 @@ import java.net.URL;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -71,17 +72,32 @@ public class LinkInputActivity extends Activity implements OnClickListener{
 			
 		}
 		
+		//close the database
+		dbhelper.getWritableDatabase().close();
+		
 		//if there was an invalid url, tell the user
 		if(invalidDetected){
+			
+			//build an alert box
 			AlertDialog a = new AlertDialog.Builder(this).create();
 			
 			a.setMessage("One or more invalid URLS were detected. " +
 					"These were not added to the link checker.");
+			
+			//set the alert box to close the activity and go back to the link checker
+			a.setButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					finish();
+				}
+			});
+			
+			a.show();
+		}else{
+			//close the view
+			finish();
 		}
-		//close the database
-		dbhelper.getWritableDatabase().close();
-		//close the view
-		finish();
 	}
 	
 	/**

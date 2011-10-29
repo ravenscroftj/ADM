@@ -5,12 +5,22 @@
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
     <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/checkLinksTable">
-        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
+        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+            <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="wrap_content" android:layout_height="wrap_content">
+                <TextView android:text="TextView" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/textView2" android:layout_alignParentRight="true"></TextView>
+                <TextView android:layout_height="wrap_content" android:text="TextView" android:id="@+id/textView1" android:layout_width="wrap_content" android:layout_alignParentTop="true" android:layout_alignParentLeft="true"></TextView>
+            </RelativeLayout>
+        </TableRow>
     </TableLayout>
     <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content">
         <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/addLinksBtn" android:text="@string/addLinks"></Button>
         <Button android:id="@+id/checkLinksBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/checkLinks"></Button>
         <Button android:id="@+id/removeOfflineBtn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/remove_dead_links"></Button>
+    </LinearLayout>
+    <LinearLayout android:layout_width="fill_parent" android:id="@+id/linearLayout2" android:orientation="horizontal" android:layout_height="wrap_content">
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/download_selected" android:id="@+id/downloadSelectedBtn"></Button>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/select_none" android:id="@+id/selectNoneBtn"></Button>
+        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/selectAllBtn" android:text="@string/select_all"></Button>
     </LinearLayout>
     
 </LinearLayout>

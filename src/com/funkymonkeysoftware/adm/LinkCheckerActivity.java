@@ -4,26 +4,25 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import com.funkymonkeysoftware.adm.download.HTTPChecker;
-import com.funkymonkeysoftware.adm.download.LinkChecker;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.util.Linkify;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RadioGroup.LayoutParams;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.funkymonkeysoftware.adm.checker.DownloadRow;
+import com.funkymonkeysoftware.adm.download.HTTPChecker;
+import com.funkymonkeysoftware.adm.download.LinkChecker;
 
 /**
  * User interface class for the link checker activity
@@ -84,6 +83,8 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		//get the table to append things to
 		TableLayout table = (TableLayout)findViewById(R.id.checkLinksTable);
 	
+		table.setColumnStretchable(1, true);
+		
 		//empty the table view
 		table.removeAllViews();
 		
@@ -105,34 +106,24 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 			
 			while(c.moveToNext()){
 				
-				TableRow tr = new TableRow(this);
-				TextView url = new TextView(this);
-				url.setText(c.getString(1));
+				DownloadRow tr = new DownloadRow(this, c.getString(1), c.getString(2));
 				
-				
-				TextView statusBox = new TextView(this);
-				//depending on the text, set colour
-				String status = c.getString(2);
-				
-				if(status.equals("unchecked")){
-					statusBox.setTextColor(Color.YELLOW);
-				}else if(status.equals("online")){
-					statusBox.setTextColor(Color.GREEN);
-				}else if(status.equals("offline")){
-					statusBox.setTextColor(Color.RED);
-				}
-				
-				statusBox.setText(status);
-				
-				tr.addView(url);
-				tr.addView(statusBox);
-				table.addView(tr);
+				table.addView(tr, new TableRow.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.FILL_PARENT));
 				
 			}
 			
 		}
 	}
 	
+	/**
+	 * Force the window to redraw all links when its shown again
+	 */
+	@Override
+	protected void onResume() {
+		super.onResume();
+		//call redraw process
+		loadLinks();
+	}
 
 	/**
 	 * Delete all URLS in the database in the 'offline' state
