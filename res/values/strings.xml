@@ -10,4 +10,5 @@
     <string name="select_all">Select All</string>
     <string name="select_none">Select None</string>
     <string name="download_selected">Download Selected</string>
+    <string name="remove_selected">Remove Selected</string>
 </resources>

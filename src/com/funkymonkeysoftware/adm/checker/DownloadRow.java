@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Path.FillType;
 import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,6 +31,14 @@ public class DownloadRow extends TableRow {
 		
 		//now set up display
 		configureDisplay();
+		
+		setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				setSelected(!getSelected());
+			}
+		});
 	}
 	
 	/**
