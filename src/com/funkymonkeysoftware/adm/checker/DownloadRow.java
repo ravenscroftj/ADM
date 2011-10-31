@@ -34,7 +34,6 @@ public class DownloadRow extends TableRow {
 		
 		setOnClickListener(new OnClickListener() {
 			
-			@Override
 			public void onClick(View v) {
 				setSelected(!getSelected());
 			}

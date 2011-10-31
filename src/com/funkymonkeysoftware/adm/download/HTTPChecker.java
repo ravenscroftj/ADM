@@ -19,7 +19,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 public class HTTPChecker implements LinkChecker {
 
-	@Override
 	public String getMatchPattern() {
 		return "http(s?)\\://\\S+";
 	}
@@ -27,7 +26,6 @@ public class HTTPChecker implements LinkChecker {
 	/**
 	 * HTTP checker is a base module and therefore has low priority
 	 */
-	@Override
 	public Integer getPriority() {
 		return 0;
 	}
@@ -35,7 +33,6 @@ public class HTTPChecker implements LinkChecker {
 	/**
 	 * This is where the checker actually does its magic!
 	 */
-	@Override
 	public String checkURL(URL theUrl) throws IOException {
 		//build a HTTP getter for the 
 		HttpClient client = new DefaultHttpClient();

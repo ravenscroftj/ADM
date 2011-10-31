@@ -34,7 +34,6 @@ public class ADMActivity extends Activity implements OnClickListener{
     /**
      * Listener for clicks on various buttons
      */
-	@Override
 	public void onClick(View v) {
 		
 		

@@ -190,7 +190,6 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	}
 	
 
-	@Override
 	public void onClick(View v) {
 		
 		if(v.equals(addLinksBtn)){

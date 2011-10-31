@@ -38,7 +38,6 @@ public class LinkInputActivity extends Activity implements OnClickListener{
 	/**
 	 * Click listener for the buttons attached to this view
 	 */
-	@Override
 	public void onClick(View v) {
 		
 		if(v.equals(addBtn)){
@@ -86,8 +85,7 @@ public class LinkInputActivity extends Activity implements OnClickListener{
 			
 			//set the alert box to close the activity and go back to the link checker
 			a.setButton("OK", new DialogInterface.OnClickListener() {
-				
-				@Override
+
 				public void onClick(DialogInterface dialog, int which) {
 					finish();
 				}
