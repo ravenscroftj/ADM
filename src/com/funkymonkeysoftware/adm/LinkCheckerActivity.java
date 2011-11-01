@@ -54,6 +54,11 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 	private Button selectAllBtn;
 	
 	/**
+	 * Button that causes selected links to be deleted
+	 */
+	private Button removeSelectedBtn;
+	
+	/**
 	 * Object designed to assist in the opening and closing of the db
 	 */
 	private DownloadsDBOpenHelper dbhelper;
@@ -92,6 +97,9 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 		
 		selectAllBtn = (Button)findViewById(R.id.toggleSelectAllBtn);
 		selectAllBtn.setOnClickListener(this);
+		
+		removeSelectedBtn = (Button)findViewById(R.id.removeSelectedBtn);
+		removeSelectedBtn.setOnClickListener(this);
 		
 		//initialise list of rows
 		rows = new LinkedList<DownloadRow>();
@@ -201,8 +209,73 @@ public class LinkCheckerActivity extends Activity implements OnClickListener{
 			removeOffline();
 		}else if(v.equals(selectAllBtn)) {
 			toggleSelectAll();
+		}else if(v.equals(removeSelectedBtn)){
+			removeSelected();
 		}
 	}
+	
+	/**
+	 * Method returns a list of urls that are selected in the checker
+	 * 
+	 * @return the selected URLS in the interface
+	 */
+	private String[] getSelectedUrls(){
+		
+		LinkedList<String> selectedUrls = new LinkedList<String>();
+		
+		for( DownloadRow row : rows){
+			
+			if(row.getSelected()){
+				selectedUrls.add(row.getURL());
+			}
+		}
+		
+		return selectedUrls.toArray(new String[selectedUrls.size()]);
+	}
+	
+	
+	public void downloadSelected(){
+		String[] keepURLS = getSelectedUrls();
+		
+		if(keepURLS.length > 0){
+			
+		}
+		
+	}
+	
+	
+	/**
+	 * Method for automatically deleting the selected links
+	 */
+	public void removeSelected(){
+
+		String[] removeURLS = getSelectedUrls();
+		
+		if(removeURLS.length > 0){
+			//open connection to database
+			SQLiteDatabase db = dbhelper.getWritableDatabase();
+			
+			String where = "(";
+			
+			for(int i=0; i < removeURLS.length - 1; i++){
+				where += "?,";
+			}
+			//add the last questionmark with no comma
+			where += "? )";
+
+			
+			db.delete("downloads", "url IN " + where, removeURLS);
+			
+			//close the database
+			db.close();
+		}
+		
+		//now re-render the view
+		loadLinks();
+		
+	}
+	
+
 	
 	
 	/**
