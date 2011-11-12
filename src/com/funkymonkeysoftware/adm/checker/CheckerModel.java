@@ -131,7 +131,7 @@ public class CheckerModel extends Observable{
 			
 			if(link.isSelected()){
 				removeURLS.add(link.getURL().toString());
-				checkerLinks.remove(i);
+				checkerLinks.remove(link);
 			}
 			
 			i++;
