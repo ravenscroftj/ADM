@@ -178,7 +178,9 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		updateDisplay();
 	}
 	
-
+	/**
+	 * Callback method that is executed when one of the buttons is clicked.
+	 */
 	public void onClick(View v) {
 		
 		switch(v.getId()){
@@ -192,9 +194,15 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 			checkUrls();
 			break;
 			
+		//when the user selects only offline links
 		case R.id.removeOfflineBtn:
+			//select only offline links
 			model.selectOffline();
 			updateDisplay();
+			//update the select all button
+			if(selectAll){
+				toggleSelectAll();
+			}
 			break;
 			
 		case R.id.removeSelectedBtn:
@@ -207,7 +215,8 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 			break;
 			
 		case R.id.downloadSelectedBtn:
-			
+			model.downloadSelected();
+			updateDisplay();
 			break;
 		}
 	}
@@ -219,6 +228,9 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 	private void checkUrls(){
 		
 		pdialog = new ProgressDialog(this);
+		
+		pdialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		
 		pdialog.setMax(model.getLinkCount());
 		pdialog.setProgress(0);
 		
@@ -232,14 +244,19 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		model.checkLinks();
 	}
 
-
+	/**
+	 * Callback for the CheckerModel when a link has been checked
+	 * 
+	 */
 	public void update(Observable observable, Object data) {
 		
 			if(data instanceof Integer){
 				Log.v("linkchecker", "running update with progress: "+data);
 				
-				pdialog.incrementProgressBy(1);
-				pdialog.setMessage(String.format("Checking Links: %d %%",(Integer)data));
+				pdialog.setProgress((Integer)data);
+				pdialog.setMessage(String.format("Checking Links: %d of %d",
+						(Integer)data, 
+						pdialog.getMax()));
 				
 				if((Integer)data == 101){
 					pdialog.hide();

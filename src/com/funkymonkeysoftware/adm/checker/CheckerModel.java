@@ -16,6 +16,19 @@ import com.funkymonkeysoftware.adm.DownloadsDBOpenHelper;
 import com.funkymonkeysoftware.adm.download.HTTPChecker;
 import com.funkymonkeysoftware.adm.download.LinkChecker;
 
+
+/**
+ * Model representative of the ADM link checker.
+ * 
+ * <p>This class holds the internal state of the Link Checker for ADM.
+ * In good old fashioned MVC style, the Activity (which acts as view and
+ * controller) communicates with this class to add, check and remove URLS
+ * within the ADM database. The model can also pass URLS on to the downloader
+ * by changing their status to pending in the database.</p>
+ * 
+ * @author James Ravenscroft
+ *
+ */
 public class CheckerModel extends Observable{
 	
 	/**
@@ -147,6 +160,56 @@ public class CheckerModel extends Observable{
 		
 	}
 	
+	/**
+	 * Method used to move selected URLS to the download queue
+	 */
+	public void downloadSelected(){
+		
+		LinkedList<String> downloadURLS = new LinkedList<String>();
+		
+		int i=0;
+		
+		for( CheckerLink link : getLinks()) {
+			
+			if(link.isSelected()){
+				downloadURLS.add(link.getURL().toString());
+				checkerLinks.remove(i);
+			}
+			
+			i++;
+		}
+		
+		if(downloadURLS.size() > 0){
+
+			String where = "(";
+			
+			for(i=0; i < downloadURLS.size() - 1; i++){
+				where += "?,";
+			}
+			//add the last questionmark with no comma
+			where += "? )";
+
+			SQLiteDatabase db = dbhelper.getWritableDatabase();
+			
+			ContentValues values = new ContentValues();
+			
+			values.put("status", "pending");
+		
+			
+			db.update("downloads", values, "url IN " + where, 
+					downloadURLS.toArray(new String[downloadURLS.size()]));
+
+			
+			//close the database
+			db.close();
+		}
+		
+	}
+	
+	
+	/**
+	 * Create a new instance of the LinkCheckerTask and runs it
+	 */
 	public void checkLinks() {
 		LinkCheckerTask lc = new LinkCheckerTask();
 		
@@ -184,8 +247,6 @@ public class CheckerModel extends Observable{
 		protected Void doInBackground(Void... params) {
 			
 			LinkChecker chk = new HTTPChecker();
-			
-			int linkCount = checkerLinks.size();
 			int currentLink = 1;
 			
 			for(CheckerLink l : checkerLinks){
@@ -196,7 +257,8 @@ public class CheckerModel extends Observable{
 					l.setStatus("offline");
 				}
 				
-				publishProgress(currentLink*100/linkCount);
+				//publish the current link progress
+				publishProgress(currentLink);
 				currentLink++;
 			}
 			

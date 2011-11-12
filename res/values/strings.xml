@@ -5,7 +5,7 @@
     <string name="addLinks">Add Links</string>
     <string name="download">Download</string>
     <string name="checkLinks">Check Links</string>
-    <string name="remove_dead_links">Remove Offline</string>
+    <string name="remove_dead_links">Select Offline</string>
     <string name="paste_links_prompt">Paste your links below...</string>
     <string name="select_all">Select All</string>
     <string name="select_none">Select None</string>
