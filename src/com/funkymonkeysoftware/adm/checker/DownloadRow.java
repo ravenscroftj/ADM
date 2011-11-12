@@ -2,9 +2,7 @@ package com.funkymonkeysoftware.adm.checker;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Path.FillType;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.TableRow;
