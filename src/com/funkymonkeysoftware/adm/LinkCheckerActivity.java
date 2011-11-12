@@ -199,10 +199,6 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 			//select only offline links
 			model.selectOffline();
 			updateDisplay();
-			//update the select all button
-			if(selectAll){
-				toggleSelectAll();
-			}
 			break;
 			
 		case R.id.removeSelectedBtn:
