@@ -1,4 +1,4 @@
-package com.funkymonkeysoftware.adm.download;
+package com.funkymonkeysoftware.adm.checker;
 
 import java.io.IOException;
 import java.net.URL;

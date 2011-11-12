@@ -13,8 +13,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 
 import com.funkymonkeysoftware.adm.DownloadsDBOpenHelper;
-import com.funkymonkeysoftware.adm.download.HTTPChecker;
-import com.funkymonkeysoftware.adm.download.LinkChecker;
 
 
 /**
