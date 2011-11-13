@@ -1,7 +1,6 @@
 package com.funkymonkeysoftware.adm.checker;
 
 import java.io.IOException;
-import java.net.URL;
 
 public interface LinkChecker {
 
@@ -27,6 +26,6 @@ public interface LinkChecker {
 	 * 				 the string returned from {@link LinkChecker#getMatchPattern()}</p>
 	 * @return <p>'online' if URL is found, 'offline' if there is a problem.</p>
 	 */
-	public String checkURL(URL theUrl) throws IOException;
+	public void checkURL(CheckerLink link) throws IOException;
 	
 }

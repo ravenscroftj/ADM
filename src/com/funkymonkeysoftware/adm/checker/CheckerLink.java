@@ -18,39 +18,55 @@ public class CheckerLink {
 	private boolean selected;
 	
 	/**
+	 * The number of bytes that this content is
+	 */
+	private long contentLength;
+	
+	/**
 	 * Create a new CheckerLink object with the necessary information
 	 * 
 	 * @param url {@link CheckerLink#url}
 	 * @param status {@link CheckerLink#status}
 	 * @param selected {@link CheckerLink#selected}
 	 */
-	public CheckerLink(URL url, String status, boolean selected){
+	public CheckerLink(URL url, String status, boolean selected, long clen){
 		this.url = url;
 		this.status = status;
 		this.selected = selected;
+		this.contentLength = clen;
 	}
 	
-	public CheckerLink(String url, String status, boolean selected) throws MalformedURLException{
-		this(new URL(url), status, selected);
+	public CheckerLink(String url, String status, boolean selected, long clen) 
+	throws MalformedURLException{
+		this(new URL(url), status, selected, clen);
 	}
 	
-	public URL getURL(){
+	public synchronized URL getURL(){
 		return url;
 	}
 	
-	public String getStatus(){
-		return status;
+	public synchronized String getStatus(){
+			return status;
 	}
 	
-	public void setStatus(String status){
-		this.status = status;
+	public synchronized void setStatus(String status){
+			this.status = status;
 	}
 	
-	public boolean isSelected(){
+	public synchronized boolean isSelected(){
 		return selected;
 	}
-	
-	public void setSelected(boolean s){
+
+	public synchronized void setSelected(boolean s){
 		selected = s;
 	}
+	
+	public synchronized void setContentLength(long clen){
+			this.contentLength = clen;
+	}
+	
+	public synchronized long getContentLength(){
+			return contentLength;
+	}
+
 }

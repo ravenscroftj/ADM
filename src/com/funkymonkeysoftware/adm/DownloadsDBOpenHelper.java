@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DownloadsDBOpenHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "adm";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	
 	public DownloadsDBOpenHelper(Context context) {
@@ -27,14 +27,24 @@ public class DownloadsDBOpenHelper extends SQLiteOpenHelper {
 				"_id INTEGER PRIMARY KEY," +
 				"url TEXT," +
 				"status TEXT," +
-				"localPath TEXT) ");
+				"localPath TEXT," +
+				"filesize INTEGER) ");
 
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-
+		
+		int cVersion = oldVersion;
+		
+		while(cVersion < newVersion) {
+			
+			if(cVersion == 1){
+				db.execSQL("ALTER TABLE downloads ADD filesize INTEGER");
+			}
+			
+			cVersion++;
+		}
 	}
 
 }

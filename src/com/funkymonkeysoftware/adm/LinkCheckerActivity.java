@@ -128,7 +128,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		}else{
 			
 			for(CheckerLink l : model.getLinks()){
-				DownloadRow tr = new DownloadRow(this, l.getURL().toString(), l.getStatus());
+				DownloadRow tr = new DownloadRow(this, l);
 				
 				tr.setSelected(l.isSelected());
 				

@@ -1,5 +1,8 @@
 package com.funkymonkeysoftware.adm.checker;
 
+import java.io.File;
+import java.net.URL;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
@@ -15,17 +18,16 @@ import android.widget.TextView;
  *
  */
 public class DownloadRow extends TableRow {
-
-	private String url;
-	private String status;
 	
 	private CheckBox cbox;
 	
-	public DownloadRow(Context context, String url, String status) {
+	private CheckerLink theLink;
+	
+	public DownloadRow(Context context, CheckerLink theLink) {
 		super(context);
-		setURL(url);
-		setStatus(status);
 
+		//get reference to checker link
+		this.theLink = theLink;
 		
 		//now set up display
 		configureDisplay();
@@ -61,20 +63,38 @@ public class DownloadRow extends TableRow {
 	private void configureDisplay(){
 		
 		TextView urlBox = new TextView(getContext());
-		urlBox.setText(url);
+		
+		if(theLink.getURL().toString().length() > 25){
+			URL theURL = theLink.getURL();
+			
+			File theFile = new File( theURL.getFile());
+			String displayText = theURL.getProtocol() + "://" +
+					theURL.getHost() + 
+					"..." + theFile.getName();
+			
+			urlBox.setText(displayText);
+		}else{
+			urlBox.setText(theLink.getURL().toString());
+		}
+		
+		
 
 		TextView statusBox = new TextView(getContext());
 		//depending on the text, set colour
 
-		if(status.equals("unchecked")){
+		if(theLink.getStatus().equals("unchecked")){
 			statusBox.setTextColor(Color.YELLOW);
-		}else if(status.equals("online")){
+		}else if(theLink.getStatus().equals("online")){
 			statusBox.setTextColor(Color.GREEN);
-		}else if(status.equals("offline")){
+		}else if(theLink.getStatus().equals("offline")){
 			statusBox.setTextColor(Color.RED);
 		}
 		
-		statusBox.setText(status);
+		statusBox.setText(theLink.getStatus());
+		
+		//add row for download size
+		TextView dlSize = new TextView(getContext());
+		dlSize.setText(getFriendlySize());
 		
 		//add checkbox
 		cbox = new CheckBox(getContext());
@@ -88,7 +108,6 @@ public class DownloadRow extends TableRow {
 		tl.gravity = Gravity.LEFT;
 		addView(cbox, tl);
 		
-		
 		tl = new TableRow.LayoutParams();
 		tl.column = 1;
 		tl.width = LayoutParams.FILL_PARENT;
@@ -97,24 +116,42 @@ public class DownloadRow extends TableRow {
 		
 		tl = new TableRow.LayoutParams();
 		tl.column = 2;
-		tl.gravity= Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		tl.gravity= Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL;
 		addView(statusBox, tl);
+		
+		tl = new TableRow.LayoutParams();
+		tl.column = 3;
+		tl.gravity= Gravity.RIGHT | Gravity.CENTER_VERTICAL;
+		addView(dlSize, tl);
+		
 	}
+	
+	protected String getFriendlySize() {
+		String status = "-";
+		
+		String[] suffixes = {"B", "KiB","MiB","GiB"};
+		
+		long size = theLink.getContentLength();
+		int dIndex = 0;
+		
+		while(size > 1024 && dIndex < suffixes.length) {
+			size /= 1024;
+			dIndex ++;
+		}
+		
+		if(size > 0){
+			status = String.format("%d %s", size, suffixes[dIndex]);
+		}
 
-	public String getURL(){ 
-		return url;
-	}
-	
-	public void setURL(String url){
-		this.url = url;
-	}
-	
-	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status){
-		this.status = status;
+	public String getURL(){ 
+		return theLink.getURL().toString();
+	}
+	
+	public String getStatus() {
+		return theLink.getStatus();
 	}
 	
 }

@@ -11,6 +11,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.funkymonkeysoftware.adm.DownloadsDBOpenHelper;
 
@@ -83,13 +84,19 @@ public class CheckerModel extends Observable{
 		//clear the list of links first
 		checkerLinks = new LinkedList<CheckerLink>();
 		
-		Cursor c = db.rawQuery("SELECT * FROM downloads WHERE " +
-				"status='unchecked' OR status='online' OR " +
-				"status='offline'", null);
+		Cursor c = db.rawQuery("SELECT url,status,filesize" +
+				" FROM downloads WHERE status IN ('online'," +
+				"'unchecked','offline')", null);
 		
 		while(c.moveToNext()){
-			CheckerLink l = new CheckerLink(c.getString(1), c.getString(2), true);
+			CheckerLink l = new CheckerLink(c.getString(0), 
+					c.getString(1), 
+					true,
+					c.getLong(2));
 			checkerLinks.add(l);
+			
+			
+			Log.v("linkchecker",String.valueOf(c.getLong(2)));
 		}
 	}
 	
@@ -249,7 +256,7 @@ public class CheckerModel extends Observable{
 			
 			for(CheckerLink l : checkerLinks){
 				try{
-					l.setStatus(chk.checkURL(l.getURL()));
+					chk.checkURL(l);
 				} catch (IOException e) {
 					//if there was an IO exception, assume it to be offline
 					l.setStatus("offline");
@@ -285,6 +292,10 @@ public class CheckerModel extends Observable{
 			for(CheckerLink l : checkerLinks){
 				ContentValues values = new ContentValues();
 				values.put("status", l.getStatus());
+				values.put("filesize", l.getContentLength());
+				
+				Log.v("linkchecker", values.get("filesize").toString());
+				
 				db.update("downloads", values, "url=?", new String[]{l.getURL().toString()});
 			}
 			
