@@ -1,13 +1,11 @@
 package com.funkymonkeysoftware.adm.download;
 
-import com.funkymonkeysoftware.adm.R;
+import java.net.MalformedURLException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
+import android.app.IntentService;
 import android.content.Intent;
-import android.os.IBinder;
 
 /**
  * Service for initialising and running the actual download process
@@ -18,49 +16,50 @@ import android.os.IBinder;
  * @author James Ravenscroft
  *
  */
-public class DownloaderService extends Service{
+public class DownloaderService extends IntentService{
+	
+	public static final String CANCEL_ACTION = "cancel";
+	public static final String DOWNLOAD_ACTION = "download";
+	
+	protected boolean running = false;
 
-	protected NotificationManager mNM;
+	protected ExecutorService es;
 	
-	protected int NOTIFICATION_ID;
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public DownloaderService() {
+		super("ADMDownloadService");
+		
+		//set up a pooled thread downloader for ADM
+		es = Executors.newFixedThreadPool(5);
 
-	
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-		
-		//get the notification ID
-		NOTIFICATION_ID = R.string.notification_id;
-		
 	}
 	
 	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-		super.onStartCommand(intent, flags, startId);
+	protected void onHandleIntent(Intent intent) {
 		
-		//make the service sticky i.e. keep running
-		return START_STICKY;
+		if(intent.getAction().equals(DOWNLOAD_ACTION)){
+			
+			//get the number of downloads and turn them into tasks
+			if(intent.getIntExtra("downloads.queuesize", 0) > 0){
+				queueDownloads(intent.getStringArrayExtra("downloads.urls"));
+			}
+			
+		}
+		
 	}
 	
-    /**
-     * Show a notification while this service is running.
-     */
-    private void showNotification() {
-        // In this sample, we'll use the same text for the ticker and the expanded notification
-        CharSequence text = getText(R.string.notification_id);
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.icon, text,
-                System.currentTimeMillis());
-
-    }
-
+	/**
+	 * Given a list of URLS, enqueue and download them
+	 */
+	protected void queueDownloads(String[] urls){
+		for(String url : urls){
+			try {
+				es.submit(new DownloadWorker(url));
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 }

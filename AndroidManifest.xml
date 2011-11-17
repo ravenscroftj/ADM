@@ -17,6 +17,7 @@
         </activity>
         <activity android:name="LinkCheckerActivity"></activity>
         <activity android:name="LinkInputActivity"></activity>
+        <service android:name=".download.DownloaderService"></service>
 
     </application>
 </manifest>
