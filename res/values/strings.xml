@@ -12,4 +12,5 @@
     <string name="download_selected">Download Selected</string>
     <string name="remove_selected">Remove Selected</string>
     <string name="notification_id">admnotification</string>
+    <string name="manage_accounts">Manage Accounts</string>
 </resources>
