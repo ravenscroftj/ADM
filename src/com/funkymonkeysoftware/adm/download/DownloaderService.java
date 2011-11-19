@@ -25,6 +25,10 @@ public class DownloaderService extends IntentService{
 
 	protected ExecutorService es;
 	
+	
+	/**
+	 * Create a new ADM Downloader service instance
+	 */
 	public DownloaderService() {
 		super("ADMDownloadService");
 		
@@ -33,6 +37,10 @@ public class DownloaderService extends IntentService{
 
 	}
 	
+	/**
+	 * Method is triggered when a new download intent is broadcast
+	 * 
+	 */
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		
@@ -49,6 +57,9 @@ public class DownloaderService extends IntentService{
 	
 	/**
 	 * Given a list of URLS, enqueue and download them
+	 * 
+	 * @param urls <p>Add a list of downloads to the download
+	 * queue.</p>
 	 */
 	protected void queueDownloads(String[] urls){
 		for(String url : urls){
