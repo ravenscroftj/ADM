@@ -3,11 +3,11 @@ package com.funkymonkeysoftware.adm.download;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 
-import com.funkymonkeysoftware.adm.DownloadsDBOpenHelper;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.funkymonkeysoftware.adm.DownloadsDBOpenHelper;
 
 /**
  * Internal representation of the ADM download list
@@ -32,7 +32,20 @@ public class DownloadModel {
 		dbhelper = new DownloadsDBOpenHelper(c);
 	}
 	
-	public void loadDownloads() throws MalformedURLException{
+	/**
+	 * Method used to get a clone of the downloads list for use in the UI
+	 * @return
+	 */
+	public synchronized LinkedList<ADMDownload> getDownloads() {
+		return new LinkedList<ADMDownload>(activeDownloads);
+	}
+	
+	/**
+	 * Method used to force the download model to refresh its database data
+	 * 
+	 * @throws MalformedURLException
+	 */
+	public synchronized void loadDownloads() throws MalformedURLException{
 		
 		//empty the activeDownloads list
 		activeDownloads = new LinkedList<ADMDownload>();

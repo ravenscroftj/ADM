@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.funkymonkeysoftware.adm.checker.CheckerLink;
 import com.funkymonkeysoftware.adm.checker.CheckerModel;
-import com.funkymonkeysoftware.adm.checker.DownloadRow;
+import com.funkymonkeysoftware.adm.checker.CheckerRow;
 
 /**
  * User interface class for the link checker activity
@@ -46,7 +46,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 	 */
 	private CheckerModel model;
 	
-	private LinkedList<DownloadRow> rows;
+	private LinkedList<CheckerRow> rows;
 	
 	/**
 	 * The button used to toggle selection of all/none of the check urls
@@ -83,7 +83,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		downloadSelectedBtn.setOnClickListener(this);
 		
 		//initialise list of rows
-		rows = new LinkedList<DownloadRow>();
+		rows = new LinkedList<CheckerRow>();
 		
 		//load the links
 		try {
@@ -128,7 +128,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		}else{
 			
 			for(CheckerLink l : model.getLinks()){
-				DownloadRow tr = new DownloadRow(this, l);
+				CheckerRow tr = new CheckerRow(this, l);
 				
 				tr.setSelected(l.isSelected());
 				
@@ -157,7 +157,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		
 		//now iterate through all rows and select them
 		
-		for(DownloadRow r : rows){
+		for(CheckerRow r : rows){
 			r.setSelected(selectAll);
 		}
 	}

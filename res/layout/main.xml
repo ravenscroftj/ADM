@@ -4,11 +4,23 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-    <LinearLayout android:id="@+id/linearLayout1" android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <Button android:text="@string/download" android:id="@+id/button1" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
-        <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/addLinks" android:id="@+id/addNewLinksBtn"></Button>
-    </LinearLayout>
-    <TableLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:id="@+id/activeDownloadsTable">
-        <TableRow android:id="@+id/tableRow1" android:layout_width="wrap_content" android:layout_height="wrap_content"></TableRow>
+
+    <TableLayout
+        android:id="@+id/activeDownloadsTable"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+        </TableRow>
     </TableLayout>
+
+    <Button
+        android:id="@+id/toggleDownloadsBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Download" />
+
 </LinearLayout>

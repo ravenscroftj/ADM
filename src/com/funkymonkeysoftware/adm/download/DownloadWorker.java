@@ -31,12 +31,6 @@ public class DownloadWorker implements Callable<String> {
 		return this.theURL.toString();
 	}
 	
-	/**
-	 * Set the status of the current download
-	 */
-	protected synchronized void setStatus(){
-		
-	}
 
 	public String call() throws Exception {
 		// TODO Auto-generated method stub

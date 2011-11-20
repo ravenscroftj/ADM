@@ -17,13 +17,13 @@ import android.widget.TextView;
  * @author James Ravenscroft
  *
  */
-public class DownloadRow extends TableRow {
+public class CheckerRow extends TableRow {
 	
 	private CheckBox cbox;
 	
 	private CheckerLink theLink;
 	
-	public DownloadRow(Context context, CheckerLink theLink) {
+	public CheckerRow(Context context, CheckerLink theLink) {
 		super(context);
 
 		//get reference to checker link

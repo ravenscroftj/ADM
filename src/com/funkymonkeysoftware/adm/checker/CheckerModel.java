@@ -251,7 +251,7 @@ public class CheckerModel extends Observable{
 
 		protected Void doInBackground(Void... params) {
 			
-			LinkChecker chk = new HTTPChecker();
+			ILinkChecker chk = new HTTPChecker();
 			int currentLink = 1;
 			
 			for(CheckerLink l : checkerLinks){

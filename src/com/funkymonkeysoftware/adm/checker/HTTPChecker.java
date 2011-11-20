@@ -15,7 +15,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
  * @author James Ravenscroft
  *
  */
-public class HTTPChecker implements LinkChecker {
+public class HTTPChecker implements ILinkChecker {
 
 	public String getMatchPattern() {
 		return "http(s?)\\://\\S+";
