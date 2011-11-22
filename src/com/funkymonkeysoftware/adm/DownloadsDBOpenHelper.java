@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DownloadsDBOpenHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "adm";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	
 	public DownloadsDBOpenHelper(Context context) {
@@ -41,6 +41,12 @@ public class DownloadsDBOpenHelper extends SQLiteOpenHelper {
 			
 			if(cVersion == 1){
 				db.execSQL("ALTER TABLE downloads ADD filesize INTEGER");
+			}
+			
+			if(cVersion == 2) {
+				db.execSQL("CREATE TABLE config(" +
+						"config_key VARCHAR PRIMARY KEY," +
+						"config_value VARCHAR)");
 			}
 			
 			cVersion++;

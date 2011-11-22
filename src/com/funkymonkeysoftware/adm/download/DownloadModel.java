@@ -83,9 +83,31 @@ public class DownloadModel {
 	 * Method used to start the downloads process
 	 * 
 	 */
-	public synchronized void downloadSelected() {
-		
-		Intent dlIntent = new Intent(DownloaderService.DOWNLOAD_ACTION);
+	public void downloadSelected() {
+		doServiceAction(DownloaderService.DOWNLOAD_ACTION);
+	}
+	
+	/**
+	 * Method used to pause selected downloads
+	 */
+	public void pauseSelected(){
+		doServiceAction(DownloaderService.PAUSE_ACTION);
+	}
+	
+	/**
+	 * Method used to cancel selected downloads
+	 */
+	public void cancelSelected() {
+		doServiceAction(DownloaderService.CANCEL_ACTION);
+	}
+	/**
+	 * Method for running a download service instance with selected downloads
+	 * 
+	 * @param action <p>The intent action to run in the {@link DownloaderService}
+	 * </p>
+	 */
+	protected synchronized void doServiceAction(String action){
+		Intent dlIntent = new Intent(action);
 		
 		LinkedList<ADMDownload> result = new LinkedList<ADMDownload>();
 		

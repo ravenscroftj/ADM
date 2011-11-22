@@ -24,7 +24,7 @@ public abstract class ADMDownloader implements IDownloader {
 	/**
 	 * Remove a download listener from the downloader
 	 * 
-	 * @param l <p>The 
+	 * @param l <p>The listener to be removed</p>
 	 */
 	public synchronized void removeListener(IDownloadListener l){
 		listeners.remove(l);

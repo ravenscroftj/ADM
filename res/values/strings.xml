@@ -13,4 +13,6 @@
     <string name="remove_selected">Remove Selected</string>
     <string name="notification_id">admnotification</string>
     <string name="manage_accounts">Manage Accounts</string>
+    <string name="notify_start_download">Initialising download process (%d queued)</string>
+    <string name="notify_finished_download">Download %s is now complete.</string>
 </resources>
