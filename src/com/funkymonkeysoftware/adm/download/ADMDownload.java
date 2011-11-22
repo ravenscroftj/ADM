@@ -4,7 +4,10 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class ADMDownload {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ADMDownload implements Parcelable{
 	/**
 	 * This is the URL that the downloader is getting
 	 */
@@ -29,14 +32,39 @@ public class ADMDownload {
 	 */
 	protected long downloadedSize = 0;
 	
+	/**
+	 * Flag raised if this download is selected in the GUI
+	 */
+	protected boolean selected = false;	
 	
-	public ADMDownload(String url, String status) throws MalformedURLException{
-		this(new URL(url), status);
+	public boolean isSelected() {
+		return selected;
+	}
+
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+
+	public ADMDownload(String url, String status, boolean selected) throws MalformedURLException{
+		this(new URL(url), status, selected);
 	}
 	
-	public ADMDownload(URL theURL, String status){
+	public ADMDownload(URL theURL, String status, boolean selected){
 		this.theURL = theURL;
 		this.status = status;
+		this.selected = selected;
+	}
+
+	public ADMDownload(Parcel in) {
+		try {
+			theURL = new URL(in.readString());
+		} catch (MalformedURLException e) {
+			theURL = null;
+		}
+		setStatus(in.readString());
+		setLocalFile(new File(in.readString()));
+		setTotalSize(in.readLong());
+		setDownloadedSize(in.readLong());
 	}
 
 	public String getStatus() {
@@ -75,4 +103,30 @@ public class ADMDownload {
 		return theURL;
 	}
 
+	
+	//------------------PARCEL API STUFF -------------------//
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+	
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeString(getTheURL().toString());
+		dest.writeString(getStatus());
+		dest.writeString(getLocalFile().getAbsolutePath());
+		dest.writeLong(getTotalSize());
+		dest.writeLong(getDownloadedSize());
+	}
+	
+    public static final Parcelable.Creator<ADMDownload> CREATOR
+	    = new Parcelable.Creator<ADMDownload>() {
+	public ADMDownload createFromParcel(Parcel in) {
+	    return new ADMDownload(in);
+	}
+	
+	public ADMDownload[] newArray(int size) {
+	    return new ADMDownload[size];
+	}
+	};
 }

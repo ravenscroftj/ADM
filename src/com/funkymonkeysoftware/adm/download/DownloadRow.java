@@ -3,6 +3,7 @@ package com.funkymonkeysoftware.adm.download;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;
+import android.widget.CheckBox;
 import android.widget.TableRow;
 import android.widget.TextView;
 
@@ -19,6 +20,11 @@ public class DownloadRow extends TableRow {
 	 */
 	ADMDownload download;
 	
+	/**
+	 * Widget representing the internal 'selected' state of the download
+	 */
+	CheckBox selectedBox;
+	
 	public DownloadRow(Context context, ADMDownload download) {
 		super(context);
 		
@@ -32,6 +38,10 @@ public class DownloadRow extends TableRow {
 		
 		//remove all child views from this row
 		removeAllViews();
+		
+		//add the selected checkbox
+		selectedBox = new CheckBox(getContext());
+		selectedBox.setChecked(download.isSelected());
 		
 		//add the url
 		TextView urlBox = new TextView(getContext());
@@ -55,14 +65,27 @@ public class DownloadRow extends TableRow {
 		//set up layout for row
 		TableRow.LayoutParams tl = new TableRow.LayoutParams();
 		tl.column = 0;
-		tl.width = LayoutParams.FILL_PARENT;
 		tl.gravity = Gravity.LEFT;
-		addView(urlBox, tl);
+		addView(selectedBox, tl);
 		
 		tl = new TableRow.LayoutParams();
 		tl.column = 1;
+		tl.width = LayoutParams.FILL_PARENT;
+		tl.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
+		addView(urlBox, tl);
+		
+		tl = new TableRow.LayoutParams();
+		tl.column = 2;
 		tl.gravity = Gravity.LEFT | Gravity.CENTER_VERTICAL;
 		addView(statusBox, tl);
 	}
 
+	/**
+	 * Set the display and decide whether the download is selected or not
+	 */
+	public void setSelected(boolean selected){
+		//set the state of the download itself
+		download.setSelected(selected);
+		selectedBox.setChecked(selected);
+	}
 }

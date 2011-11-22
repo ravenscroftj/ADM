@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.util.LinkedList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -25,11 +26,19 @@ public class DownloadModel {
 	 */
 	protected LinkedList<ADMDownload> activeDownloads;
 	
+	/**
+	 * SQLite database helper object used to open db connections
+	 */
 	protected DownloadsDBOpenHelper dbhelper;
 	
+	/**
+	 * The context that this model belongs to
+	 */
+	protected Context context;
+	
 	public DownloadModel(Context c){
-		//create a download database helper
 		dbhelper = new DownloadsDBOpenHelper(c);
+		context = c;
 	}
 	
 	/**
@@ -60,10 +69,47 @@ public class DownloadModel {
 		while(result.moveToNext()){
 			ADMDownload dl = new ADMDownload(
 					result.getString(1),
-					result.getString(2));
+					result.getString(2),
+					true);
 			
 			activeDownloads.add(dl);
 		}
+		
+		//close database connection
+		db.close();
 	}
 	
+	/**
+	 * Method used to start the downloads process
+	 * 
+	 */
+	public synchronized void downloadSelected() {
+		
+		Intent dlIntent = new Intent(DownloaderService.DOWNLOAD_ACTION);
+		
+		LinkedList<ADMDownload> result = new LinkedList<ADMDownload>();
+		
+		for(ADMDownload dl : activeDownloads){
+			if(dl.isSelected()){
+				result.add(dl);
+			}
+		}
+		
+		dlIntent.putExtra("downloads", 
+				result.toArray(new ADMDownload[result.size()]));
+		
+		context.startService(dlIntent);
+	}
+	
+	public synchronized void removeDownload(ADMDownload dl) {
+		
+		//get a connection to the downloads database
+		SQLiteDatabase db = dbhelper.getReadableDatabase();
+		
+		//remove the download from the table
+		db.delete("downloads", "url=?", new String[]{dl.getTheURL().toString()});
+		
+		//remove the download from the list 
+		activeDownloads.remove(dl);
+	}
 }
