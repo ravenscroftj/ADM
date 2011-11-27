@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference android:key="storage_path" android:summary="@string/storage_path_pref_summary" android:title="Download Storage Path" android:defaultValue="Downloads"/>
+
+    
+
+</PreferenceScreen>

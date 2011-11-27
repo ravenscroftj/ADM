@@ -123,6 +123,11 @@ public class DownloadModel {
 		context.startService(dlIntent);
 	}
 	
+	/**
+	 * Remove an active download from the queue
+	 * 
+	 * @param dl <p>The download that should be removed</p>
+	 */
 	public synchronized void removeDownload(ADMDownload dl) {
 		
 		//get a connection to the downloads database

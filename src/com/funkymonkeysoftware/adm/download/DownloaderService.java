@@ -1,5 +1,7 @@
 package com.funkymonkeysoftware.adm.download;
 
+import java.io.File;
+import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -9,6 +11,9 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Environment;
+import android.preference.PreferenceManager;
 
 /**
  * Service for initialising and running the actual download process
@@ -84,10 +89,57 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		nm.notify(NOTIFY_START_DL, note);
 		
 		for(ADMDownload dl : dls){
+				
+				if(dl.getLocalFile() == null){
+					
+				}
+			
 				es.submit(new DownloadWorker(this, dl));
 		}
 	}
+	
+	protected void generateLocalFile(ADMDownload dl){
+		
+		if(Environment.getExternalStorageState().
+				equals(Environment.MEDIA_MOUNTED)){
+		
+			//get the directory for the external media
+			File sdcard = Environment.getExternalStorageDirectory();
+			
+			//get the path to the downloads dir
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			
+			String dldir = prefs.getString("storage_path","Downloads");
+			
+			//get a file name from the URL
+			String filename = "";
+			
+			//assemble the full path
+			File localPath = new File(sdcard.getAbsolutePath() + 
+					File.separator + dldir + File.separator + filename);
+			
+			//set the path for the download
+			dl.setLocalFile(localPath);
+		}
+		
+	}
 
+	public String getDownloadFilename(URL downloadURL, String localPath) throws DownloadException{
+		
+		if(downloadURL == null)
+			throw new DownloadException("Cannot generate filename for null URL");
+		
+		String result = "";
+		
+		//first figure out the filename from the URL
+		
+		return result;
+	}
+	
+	/**
+	 * Method called when the download process has finished
+	 * 
+	 */
 	@Override
 	public void OnDownloadComplete(DownloadEvent evt) {
 		
@@ -96,12 +148,12 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		n.tickerText = String.format(
 				String.valueOf(getText(R.string.notify_finished_download)),
 				evt.getDownload().getLocalFile().getName());
+		
+		nm.notify(NOTIFY_FINISH_DL, n);
 	}
 
 	@Override
 	public void OnDownloadProgress(DownloadEvent evt) {
-		// TODO Auto-generated method stub
-		
 	}
 	
 	
