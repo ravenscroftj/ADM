@@ -105,12 +105,10 @@ public class ADMDownload implements Parcelable{
 
 	
 	//------------------PARCEL API STUFF -------------------//
-	@Override
 	public int describeContents() {
 		return 0;
 	}
-	
-	@Override
+
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(getTheURL().toString());
 		dest.writeString(getStatus());

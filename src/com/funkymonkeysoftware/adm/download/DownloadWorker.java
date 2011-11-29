@@ -18,7 +18,6 @@ public class DownloadWorker implements Runnable {
 		this.parent = parent;
 	}
 	
-	@Override
 	public void run() {
 			//get a downloader to handle the download process
 			downloader = ADMDownloaderFactory.getDownloader(theDl);

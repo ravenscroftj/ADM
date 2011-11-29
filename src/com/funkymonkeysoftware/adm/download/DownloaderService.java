@@ -140,7 +140,6 @@ public class DownloaderService extends IntentService implements IDownloadListene
 	 * Method called when the download process has finished
 	 * 
 	 */
-	@Override
 	public void OnDownloadComplete(DownloadEvent evt) {
 		
 		Notification n = new Notification();
@@ -152,7 +151,6 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		nm.notify(NOTIFY_FINISH_DL, n);
 	}
 
-	@Override
 	public void OnDownloadProgress(DownloadEvent evt) {
 	}
 	

@@ -11,6 +11,10 @@ import java.util.LinkedList;
 public abstract class ADMDownloader implements IDownloader {
 
 	protected LinkedList<IDownloadListener> listeners;
+	
+	public ADMDownloader(){
+		listeners = new LinkedList<IDownloadListener>();
+	}
 
 	/**
 	 * Add a download listener from the downloader

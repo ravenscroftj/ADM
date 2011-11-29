@@ -19,12 +19,12 @@ import org.apache.http.impl.client.DefaultHttpClient;
  */
 public class HTTPDownloader extends ADMDownloader {
 	
-	@Override
+
 	public boolean isResumable() {
 		return false;
 	}
 
-	@Override
+
 	public void downloadURL(ADMDownload dl) throws DownloadException {
 		if( dl.getLocalFile() == null){
 			throw new DownloadException("Could not download, no local path set.");
@@ -74,12 +74,12 @@ public class HTTPDownloader extends ADMDownloader {
 		fireDownloadFinishedEvent(dl);
 	}
 	
-	@Override
+
 	public String getMatchPattern() {
 		return "http(s?)\\://\\S+";
 	}
 
-	@Override
+	
 	public Integer getPriority() {
 		return 0;
 	}
