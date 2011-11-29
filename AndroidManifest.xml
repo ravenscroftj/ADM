@@ -15,9 +15,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="LinkCheckerActivity"></activity>
-        <activity android:name="LinkInputActivity"></activity>
+        <activity android:name=".LinkCheckerActivity"></activity>
+        <activity android:name=".LinkInputActivity"></activity>
         <service android:name=".download.DownloaderService"></service>
+        <activity android:name=".config.ADMPreferencesActivity"></activity>
 
     </application>
 </manifest>

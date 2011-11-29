@@ -2,7 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <group android:id="@+id/mainMenuGroup"><item android:id="@+id/addLinksAction" android:title="@string/addLinks"></item>
-    <item android:id="@+id/manageAccounts" android:title="@string/manage_accounts"></item>
+    <item android:id="@+id/manageAccounts" android:title="@string/manage_accounts">
+    </item>
+    <item android:id="@+id/managePreferences" android:title="@string/manage_preferences"></item>
 </group>
 
    

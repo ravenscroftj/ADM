@@ -4,7 +4,10 @@ import java.net.MalformedURLException;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,6 +15,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TableLayout;
 
+import com.funkymonkeysoftware.adm.config.ADMPreferencesActivity;
 import com.funkymonkeysoftware.adm.download.ADMDownload;
 import com.funkymonkeysoftware.adm.download.DownloadModel;
 import com.funkymonkeysoftware.adm.download.DownloadRow;
@@ -79,10 +83,15 @@ public class ADMActivity extends Activity implements OnClickListener{
 		
 	   switch(item.getItemId()) {
 	   		
-	   case R.id.addLinksAction:
-			//show the link checker
-			startActivity(new Intent(this, LinkCheckerActivity.class));
-			break;
+		   case R.id.addLinksAction:
+				//show the link checker
+				startActivity(new Intent(this, LinkCheckerActivity.class));
+				break;
+				
+		   case R.id.managePreferences:
+			   startActivity(new Intent(this, ADMPreferencesActivity.class));
+			   break;
+			
 	   }
 
 	   return true;

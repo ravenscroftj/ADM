@@ -98,7 +98,7 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		}
 	}
 	
-	protected void generateLocalFile(ADMDownload dl){
+	public void generateLocalFile(ADMDownload dl){
 		
 		if(Environment.getExternalStorageState().
 				equals(Environment.MEDIA_MOUNTED)){
@@ -124,6 +124,14 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		
 	}
 
+	/**
+	 * Test getting the download filename from the URL
+	 * 
+	 * @param downloadURL <p>The URL to check for a valid filename</p>
+	 * @param localPath <p>The directory that the file will be stored in</p>
+	 * @return
+	 * @throws DownloadException
+	 */
 	public String getDownloadFilename(URL downloadURL, String localPath) throws DownloadException{
 		
 		if(downloadURL == null)
@@ -132,6 +140,25 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		String result = "";
 		
 		//first figure out the filename from the URL
+		if(downloadURL.getFile().indexOf("?") > 0){
+			result = downloadURL.getFile().substring(1, 
+					downloadURL.getFile().indexOf("?"));
+			
+			//find the file extension and file name
+			String ext = result.substring(result.indexOf("."), result.length());
+			//and the file name bit
+			String name = result.substring(0, result.indexOf("."));
+			
+			File pathFile = new File(localPath + File.separator + name + ext);
+			int i = 0;
+			
+			while(pathFile.exists()){
+				pathFile = new File(localPath + File.separator + 
+						name + "(" + String.valueOf(i) + ")"+ ext);
+			}
+			
+			return pathFile.getAbsolutePath();
+		}
 		
 		return result;
 	}

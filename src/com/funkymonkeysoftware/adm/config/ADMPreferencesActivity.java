@@ -20,7 +20,6 @@ public class ADMPreferencesActivity extends PreferenceActivity {
 		//load the preferences
 		addPreferencesFromResource(R.xml.userprefs);
 		
-		
 	}
 	
 }

@@ -16,4 +16,5 @@
     <string name="notify_start_download">Initialising download process (%d queued)</string>
     <string name="notify_finished_download">Download %s is now complete.</string>
     <string name="storage_path_pref_summary">The path that downloads should be saved to locally by default</string>
+    <string name="manage_preferences">Manage Preferences</string>
 </resources>

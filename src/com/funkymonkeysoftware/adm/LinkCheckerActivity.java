@@ -129,7 +129,6 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 			
 			for(CheckerLink l : model.getLinks()){
 				CheckerRow tr = new CheckerRow(this, l);
-				
 				tr.setSelected(l.isSelected());
 				
 				//add the row to the table and the rows list
@@ -147,7 +146,7 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 	private void toggleSelectAll(){
 		
 		//swap the flag
-		selectAll = !selectAll;
+		selectAll = ! selectAll;
 		
 		//see what to display on the select button
 		int id = selectAll ? R.string.select_none : R.string.select_all;
