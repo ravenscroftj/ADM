@@ -13,6 +13,7 @@ import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 
 /**
@@ -45,11 +46,17 @@ public class DownloaderService extends IntentService implements IDownloadListene
 	 */
 	public DownloaderService() {
 		super("ADMDownloadService");
-		
+	}
+	
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+
 		//set up a pooled thread downloader for ADM
 		es = Executors.newFixedThreadPool(5);
 		//get pointer to the system notification service
 		nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+		
+		return super.onStartCommand(intent, flags, startId);
 	}
 	
 	/**
@@ -64,7 +71,8 @@ public class DownloaderService extends IntentService implements IDownloadListene
 			
 			//get the number of downloads and turn them into tasks
 			if(intent.getIntExtra("downloads.queuesize", 0) > 0){
-				queueDownloads((ADMDownload[])intent.getParcelableArrayExtra("downloads"));
+				
+				queueDownloads(intent.getParcelableArrayExtra("downloads"));
 			}
 			
 		}
@@ -77,7 +85,7 @@ public class DownloaderService extends IntentService implements IDownloadListene
 	 * @param urls <p>Add a list of downloads to the download
 	 * queue.</p>
 	 */
-	protected void queueDownloads(ADMDownload[] dls){
+	protected void queueDownloads(Parcelable[] dls){
 		
 		Notification note = new Notification();
 		
@@ -88,10 +96,15 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		
 		nm.notify(NOTIFY_START_DL, note);
 		
-		for(ADMDownload dl : dls){
+		for(Parcelable p : dls){
 				
+				if( !(p instanceof ADMDownload))
+					return;
+				
+				ADMDownload dl = (ADMDownload)p;
+			
 				if(dl.getLocalFile() == null){
-					
+					generateLocalFile(dl);
 				}
 			
 				es.submit(new DownloadWorker(this, dl));
@@ -137,28 +150,33 @@ public class DownloaderService extends IntentService implements IDownloadListene
 		if(downloadURL == null)
 			throw new DownloadException("Cannot generate filename for null URL");
 		
-		String result = "";
-		
+		String result = downloadURL.getFile();
+
 		//first figure out the filename from the URL
-		if(downloadURL.getFile().indexOf("?") > 0){
+		if(result.indexOf("?") > 0){
+
 			result = downloadURL.getFile().substring(1, 
 					downloadURL.getFile().indexOf("?"));
-			
-			//find the file extension and file name
-			String ext = result.substring(result.indexOf("."), result.length());
-			//and the file name bit
-			String name = result.substring(0, result.indexOf("."));
-			
-			File pathFile = new File(localPath + File.separator + name + ext);
-			int i = 0;
-			
-			while(pathFile.exists()){
-				pathFile = new File(localPath + File.separator + 
-						name + "(" + String.valueOf(i) + ")"+ ext);
-			}
-			
-			return pathFile.getAbsolutePath();
 		}
+		
+		if(result.endsWith("/")){
+			result = "index.html";
+		}
+		
+		//find the file extension and file name
+		String ext = result.substring(result.indexOf("."), result.length());
+		//and the file name bit
+		String name = result.substring(0, result.indexOf("."));
+		
+		File pathFile = new File(localPath + File.separator + name + ext);
+		int i = 0;
+		
+		while(pathFile.exists()){
+			pathFile = new File(localPath + File.separator + 
+					name + "(" + String.valueOf(i) + ")"+ ext);
+		}
+		
+		result = pathFile.getAbsolutePath();
 		
 		return result;
 	}

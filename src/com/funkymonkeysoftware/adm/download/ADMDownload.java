@@ -35,7 +35,7 @@ public class ADMDownload implements Parcelable{
 	/**
 	 * Flag raised if this download is selected in the GUI
 	 */
-	protected boolean selected = false;	
+	protected boolean selected = true;	
 	
 	public boolean isSelected() {
 		return selected;
@@ -112,7 +112,12 @@ public class ADMDownload implements Parcelable{
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(getTheURL().toString());
 		dest.writeString(getStatus());
-		dest.writeString(getLocalFile().getAbsolutePath());
+		
+		if(getLocalFile() != null){
+			dest.writeString(getLocalFile().getAbsolutePath());
+		}else{
+			dest.writeString("");
+		}
 		dest.writeLong(getTotalSize());
 		dest.writeLong(getDownloadedSize());
 	}

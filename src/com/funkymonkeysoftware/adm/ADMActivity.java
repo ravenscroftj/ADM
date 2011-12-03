@@ -4,15 +4,13 @@ import java.net.MalformedURLException;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TableLayout;
 
 import com.funkymonkeysoftware.adm.config.ADMPreferencesActivity;
@@ -41,6 +39,28 @@ public class ADMActivity extends Activity implements OnClickListener{
         
         //load the downloads model and get all the active downloads
         model = new DownloadModel(this);
+        try {
+			model.loadDownloads();
+		} catch (MalformedURLException e) {
+			//TODO: provide an error message and fix the downloads db
+		}
+        
+        Button dlButton = (Button)findViewById(R.id.toggleDownloadsBtn);
+        dlButton.setOnClickListener(this);
+        
+        //draw the downloads table
+        drawDownloads();
+    }
+    
+    
+    /**
+     * Method called when the activity is brought back into the foreground
+     * 
+     */
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
         try {
 			model.loadDownloads();
 		} catch (MalformedURLException e) {
@@ -91,7 +111,6 @@ public class ADMActivity extends Activity implements OnClickListener{
 		   case R.id.managePreferences:
 			   startActivity(new Intent(this, ADMPreferencesActivity.class));
 			   break;
-			
 	   }
 
 	   return true;
@@ -102,6 +121,12 @@ public class ADMActivity extends Activity implements OnClickListener{
      */
 	public void onClick(View v) {
 
+		switch(v.getId()){
+		   case R.id.toggleDownloadsBtn:
+			   model.downloadSelected();
+			   break;
+		}
+		
 	}
 	
 	

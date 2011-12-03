@@ -107,7 +107,9 @@ public class DownloadModel {
 	 * </p>
 	 */
 	protected synchronized void doServiceAction(String action){
-		Intent dlIntent = new Intent(action);
+		Intent dlIntent = new Intent(context, DownloaderService.class);
+		
+		dlIntent.setAction(DownloaderService.DOWNLOAD_ACTION);
 		
 		LinkedList<ADMDownload> result = new LinkedList<ADMDownload>();
 		
@@ -119,6 +121,8 @@ public class DownloadModel {
 		
 		dlIntent.putExtra("downloads", 
 				result.toArray(new ADMDownload[result.size()]));
+		
+		dlIntent.putExtra("downloads.queuesize", result.size());
 		
 		context.startService(dlIntent);
 	}

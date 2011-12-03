@@ -212,6 +212,10 @@ public class LinkCheckerActivity extends Activity implements OnClickListener, Ob
 		case R.id.downloadSelectedBtn:
 			model.downloadSelected();
 			updateDisplay();
+			//remove model observers - makes garbage collection possible
+			model.deleteObservers();
+			//finish the display
+			finish();
 			break;
 		}
 	}
